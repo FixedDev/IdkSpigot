@@ -1,0 +1,25 @@
+From 21c96ea53d2eb94aabef6e0572b4efc5157f1a16 Mon Sep 17 00:00:00 2001
+From: Gilberto Garcia <gilbertodamian14@gmail.com>
+Date: Sat, 17 Aug 2019 18:23:13 -0500
+Subject: [PATCH] Set the b and c objects as a public objects to allow the
+ usage(should be a getter but I don't care)
+
+
+diff --git a/src/main/java/net/minecraft/server/ChunkRegionLoader.java b/src/main/java/net/minecraft/server/ChunkRegionLoader.java
+index 6b244904..03c5b0c3 100644
+--- a/src/main/java/net/minecraft/server/ChunkRegionLoader.java
++++ b/src/main/java/net/minecraft/server/ChunkRegionLoader.java
+@@ -17,8 +17,8 @@ import org.apache.logging.log4j.Logger;
+ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
+ 
+     private static final Logger a = LogManager.getLogger();
+-    private Map<ChunkCoordIntPair, NBTTagCompound> b = new ConcurrentHashMap();
+-    private Set<ChunkCoordIntPair> c = Collections.newSetFromMap(new ConcurrentHashMap());
++    public Map<ChunkCoordIntPair, NBTTagCompound> b = new ConcurrentHashMap(); // IdkSpigot - private -> public
++    public Set<ChunkCoordIntPair> c = Collections.newSetFromMap(new ConcurrentHashMap()); // IdkSpigot - private -> public
+     private final File d;
+     private boolean e = false;
+ 
+-- 
+2.21.0.windows.1
+
