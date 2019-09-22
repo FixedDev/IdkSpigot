@@ -1,0 +1,24 @@
+From 0a5ef2394562a8b926db129eba5d54e05d208e97 Mon Sep 17 00:00:00 2001
+From: Gilberto Garcia <gilbertodamian14@gmail.com>
+Date: Sat, 21 Sep 2019 17:24:54 -0500
+Subject: [PATCH] Changed POM
+
+
+diff --git a/pom.xml b/pom.xml
+index 6aaba502..10e7a47d 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -1,8 +1,8 @@
+ <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+     <modelVersion>4.0.0</modelVersion>
+-    <groupId>org.github.paperspigot</groupId>
+-    <artifactId>paperspigot</artifactId>
++    <groupId>me.fixeddev</groupId>
++    <artifactId>idkspigot</artifactId>
+     <packaging>jar</packaging>
+     <version>1.8.8-R0.1-SNAPSHOT</version>
+     <name>PaperSpigot</name>
+-- 
+2.21.0.windows.1
+

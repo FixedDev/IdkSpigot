@@ -1,0 +1,23 @@
+From 4d9be5d00876281e23e8bbe90431f0ccfca7fc83 Mon Sep 17 00:00:00 2001
+From: Gilberto Garcia <gilbertodamian14@gmail.com>
+Date: Sat, 17 Aug 2019 18:21:45 -0500
+Subject: [PATCH] Set the chunkLoader as a public object to allow the
+ usage(should be a getter but I don't care)
+
+
+diff --git a/src/main/java/net/minecraft/server/ChunkProviderServer.java b/src/main/java/net/minecraft/server/ChunkProviderServer.java
+index c4dab42b..3e16ac8e 100644
+--- a/src/main/java/net/minecraft/server/ChunkProviderServer.java
++++ b/src/main/java/net/minecraft/server/ChunkProviderServer.java
+@@ -32,7 +32,7 @@ public class ChunkProviderServer implements IChunkProvider {
+     public LongHashSet unloadQueue = new LongHashSet(); // CraftBukkit - LongHashSet
+     public Chunk emptyChunk;
+     public IChunkProvider chunkProvider;
+-    private IChunkLoader chunkLoader;
++    public IChunkLoader chunkLoader; // IdkSpigot - private -> public
+     public boolean forceChunkLoad = false; // CraftBukkit - true -> false
+     public LongObjectHashMap<Chunk> chunks = new LongObjectHashMap<Chunk>();
+     public WorldServer world;
+-- 
+2.21.0.windows.1
+

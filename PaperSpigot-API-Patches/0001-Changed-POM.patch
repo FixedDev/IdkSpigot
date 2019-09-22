@@ -1,0 +1,24 @@
+From 761086ef19f1bf2807070b71615ba1537c45da8e Mon Sep 17 00:00:00 2001
+From: Gilberto Garcia <gilbertodamian14@gmail.com>
+Date: Sat, 21 Sep 2019 17:24:31 -0500
+Subject: [PATCH] Changed POM
+
+
+diff --git a/pom.xml b/pom.xml
+index fe9d6d26..dcc56ce1 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -9,8 +9,8 @@
+         <version>dev-SNAPSHOT</version>
+     </parent>
+ 
+-    <groupId>org.github.paperspigot</groupId>
+-    <artifactId>paperspigot-api</artifactId>
++    <groupId>me.fixeddev</groupId>
++    <artifactId>idkspigot-api</artifactId>
+     <version>1.8.8-R0.1-SNAPSHOT</version>
+     <packaging>jar</packaging>
+ 
+-- 
+2.21.0.windows.1
+
