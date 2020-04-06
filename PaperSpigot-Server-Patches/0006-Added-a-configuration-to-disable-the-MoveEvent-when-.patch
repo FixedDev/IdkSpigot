@@ -1,0 +1,93 @@
+From 0b9de4d01edd479ced2fcc11c1802ac8f8fe1524 Mon Sep 17 00:00:00 2001
+From: Gilberto Garcia <gilbertodamian14@gmail.com>
+Date: Sun, 5 Apr 2020 19:29:57 -0500
+Subject: [PATCH] Added a configuration to disable the MoveEvent when the
+ player looks to other place
+
+
+diff --git a/src/main/java/net/minecraft/server/PlayerConnection.java b/src/main/java/net/minecraft/server/PlayerConnection.java
+index 4391ad7e..e11fb8e1 100644
+--- a/src/main/java/net/minecraft/server/PlayerConnection.java
++++ b/src/main/java/net/minecraft/server/PlayerConnection.java
+@@ -268,29 +268,32 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
+ 
+                     // Skip the first time we do this
+                     if (true) { // Spigot - don't skip any move events
+-                        Location oldTo = to.clone();
+-                        PlayerMoveEvent event = new PlayerMoveEvent(player, from, to);
+-                        this.server.getPluginManager().callEvent(event);
+-
+-                        // If the event is cancelled we move the player back to their old location.
+-                        if (event.isCancelled()) {
+-                            this.player.playerConnection.sendPacket(new PacketPlayOutPosition(from.getX(), from.getY(), from.getZ(), from.getYaw(), from.getPitch(), Collections.<PacketPlayOutPosition.EnumPlayerTeleportFlags>emptySet()));
+-                            return;
+-                        }
++                        // IdkSpigot - Don't call the PlayerMoveEvent when only the yaw and pitch change
++                        if (packetplayinflying.hasPos || !server.isMoveEventDisabledOnLook()) {
++                            Location oldTo = to.clone();
++                            PlayerMoveEvent event = new PlayerMoveEvent(player, from, to);
++                            this.server.getPluginManager().callEvent(event);
++
++                            // If the event is cancelled we move the player back to their old location.
++                            if (event.isCancelled()) {
++                                this.player.playerConnection.sendPacket(new PacketPlayOutPosition(from.getX(), from.getY(), from.getZ(), from.getYaw(), from.getPitch(), Collections.<PacketPlayOutPosition.EnumPlayerTeleportFlags>emptySet()));
++                                return;
++                            }
+ 
+-                        /* If a Plugin has changed the To destination then we teleport the Player
+-                        there to avoid any 'Moved wrongly' or 'Moved too quickly' errors.
+-                        We only do this if the Event was not cancelled. */
+-                        if (!oldTo.equals(event.getTo()) && !event.isCancelled()) {
+-                            this.player.getBukkitEntity().teleport(event.getTo(), PlayerTeleportEvent.TeleportCause.UNKNOWN);
+-                            return;
+-                        }
++                            /* If a Plugin has changed the To destination then we teleport the Player
++                            there to avoid any 'Moved wrongly' or 'Moved too quickly' errors.
++                            We only do this if the Event was not cancelled. */
++                            if (!oldTo.equals(event.getTo()) && !event.isCancelled()) {
++                                this.player.getBukkitEntity().teleport(event.getTo(), PlayerTeleportEvent.TeleportCause.UNKNOWN);
++                                return;
++                            }
+ 
+-                        /* Check to see if the Players Location has some how changed during the call of the event.
+-                        This can happen due to a plugin teleporting the player instead of using .setTo() */
+-                        if (!from.equals(this.getPlayer().getLocation()) && this.justTeleported) {
+-                            this.justTeleported = false;
+-                            return;
++                            /* Check to see if the Players Location has some how changed during the call of the event.
++                             This can happen due to a plugin teleporting the player instead of using .setTo() */
++                            if (!from.equals(this.getPlayer().getLocation()) && this.justTeleported) {
++                                this.justTeleported = false;
++                                return;
++                            }
+                         }
+                     }
+                 }
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+index e9d6390f..5f8a6b8b 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+@@ -479,6 +479,10 @@ public final class CraftServer implements Server {
+         return matchedPlayers;
+     }
+ 
++    public boolean isMoveEventDisabledOnLook() {
++        return this.getConfigBoolean("disableMoveEventOnLook", true);
++    }
++
+     @Override
+     public int getMaxPlayers() {
+         return playerList.getMaxPlayers();
+diff --git a/src/main/resources/configurations/bukkit.yml b/src/main/resources/configurations/bukkit.yml
+index 8bbb835f..bd014972 100644
+--- a/src/main/resources/configurations/bukkit.yml
++++ b/src/main/resources/configurations/bukkit.yml
+@@ -41,3 +41,4 @@ database:
+     driver: org.sqlite.JDBC
+     password: walrus
+     url: jdbc:sqlite:{DIR}{NAME}.db
++disableMoveEventOnLook: true
+\ No newline at end of file
+-- 
+2.21.0.windows.1
+
