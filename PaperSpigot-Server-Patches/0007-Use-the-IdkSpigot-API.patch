@@ -1,0 +1,24 @@
+From d015f2a47c8d854ac9c99a0186097b251d1f92f0 Mon Sep 17 00:00:00 2001
+From: Gilberto Garcia <gilbertodamian14@gmail.com>
+Date: Sun, 5 Apr 2020 19:35:29 -0500
+Subject: [PATCH] Use the IdkSpigot API
+
+
+diff --git a/pom.xml b/pom.xml
+index 10e7a47d..1bbcffac 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -35,8 +35,8 @@
+             <version>3.0.3</version>
+         </dependency>
+         <dependency>
+-            <groupId>org.github.paperspigot</groupId>
+-            <artifactId>paperspigot-api</artifactId>
++            <groupId>me.fixeddev</groupId>
++            <artifactId>idkspigot-api</artifactId>
+             <version>${project.version}</version>
+             <type>jar</type>
+             <scope>compile</scope>
+-- 
+2.21.0.windows.1
+
