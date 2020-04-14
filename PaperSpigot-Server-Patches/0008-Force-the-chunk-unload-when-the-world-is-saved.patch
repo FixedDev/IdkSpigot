@@ -1,0 +1,60 @@
+From a0ca631b1f25784554b95451af5f3b087b3fa8d1 Mon Sep 17 00:00:00 2001
+From: Gilberto Garcia <gilbertodamian14@gmail.com>
+Date: Tue, 14 Apr 2020 17:13:12 -0500
+Subject: [PATCH] Force the chunk unload when the world is saved
+
+
+diff --git a/src/main/java/net/minecraft/server/WorldServer.java b/src/main/java/net/minecraft/server/WorldServer.java
+index 87529552..9188d4c5 100644
+--- a/src/main/java/net/minecraft/server/WorldServer.java
++++ b/src/main/java/net/minecraft/server/WorldServer.java
+@@ -959,18 +959,37 @@ public class WorldServer extends World implements IAsyncTaskHandler {
+             }
+ 
+             this.chunkProvider.saveChunks(flag, iprogressupdate);
+-            // CraftBukkit - ArrayList -> Collection
+-            Collection arraylist = this.chunkProviderServer.a();
+-            Iterator iterator = arraylist.iterator();
++            // IdkSpigot start - Moved to WorldServer#unloadChunks
++            //
++            //            Collection arraylist = this.chunkProviderServer.a();
++            //            Iterator iterator = arraylist.iterator();
++            //
++            //            while (iterator.hasNext()) {
++            //                Chunk chunk = (Chunk) iterator.next();
++            //
++            //                if (chunk != null && !this.manager.a(chunk.locX, chunk.locZ)) {
++            //                    this.chunkProviderServer.queueUnload(chunk.locX, chunk.locZ);
++            //                }
++            //            }
++            // IdkSpigot end
++        }
+ 
+-            while (iterator.hasNext()) {
+-                Chunk chunk = (Chunk) iterator.next();
++        // IdkSpigot - Force the chunk unload every time
++        unloadChunks();
++    }
+ 
+-                if (chunk != null && !this.manager.a(chunk.locX, chunk.locZ)) {
+-                    this.chunkProviderServer.queueUnload(chunk.locX, chunk.locZ);
+-                }
+-            }
++    // IdkSpigot - Moved from the WorldServer#save method
++    public void unloadChunks() {
++        // CraftBukkit - ArrayList -> Collection
++        Collection arraylist = this.chunkProviderServer.a();
++        Iterator iterator = arraylist.iterator();
++
++        while (iterator.hasNext()) {
++            Chunk chunk = (Chunk) iterator.next();
+ 
++            if (chunk != null && !this.manager.a(chunk.locX, chunk.locZ)) {
++                this.chunkProviderServer.queueUnload(chunk.locX, chunk.locZ);
++            }
+         }
+     }
+ 
+-- 
+2.21.0.windows.1
+
