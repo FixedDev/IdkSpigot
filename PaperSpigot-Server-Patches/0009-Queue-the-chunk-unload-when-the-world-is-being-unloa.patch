@@ -1,0 +1,68 @@
+From e8cdc7ebcb527bebcee5c3a411dfebd272c4dd79 Mon Sep 17 00:00:00 2001
+From: Gilberto Garcia <gilbertodamian14@gmail.com>
+Date: Tue, 14 Apr 2020 18:00:27 -0500
+Subject: [PATCH] Queue the chunk unload when the world is being unloaded If
+ the world chunks are already unloaded, delete everything that's not needed
+
+
+diff --git a/src/main/java/net/minecraft/server/WorldServer.java b/src/main/java/net/minecraft/server/WorldServer.java
+index 9188d4c5..c787e3c0 100644
+--- a/src/main/java/net/minecraft/server/WorldServer.java
++++ b/src/main/java/net/minecraft/server/WorldServer.java
+@@ -972,10 +972,10 @@ public class WorldServer extends World implements IAsyncTaskHandler {
+             //                }
+             //            }
+             // IdkSpigot end
++        } else {
++            // IdkSpigot - Force the chunk unload every time
++            unloadChunks();
+         }
+-
+-        // IdkSpigot - Force the chunk unload every time
+-        unloadChunks();
+     }
+ 
+     // IdkSpigot - Moved from the WorldServer#save method
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+index 5f8a6b8b..6422d454 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+@@ -1006,22 +1006,24 @@ public final class CraftServer implements Server {
+                 getLogger().log(Level.SEVERE, null, ex);
+             }
+         } else {
++            handle.unloadChunks();
++
+             ChunkProviderServer chunkProviderServer = handle.chunkProviderServer;
++            if(chunkProviderServer.chunks.isEmpty()){
++                ChunkRegionLoader regionLoader = (ChunkRegionLoader) chunkProviderServer.chunkLoader;
+ 
+-            ChunkRegionLoader regionLoader = (ChunkRegionLoader) chunkProviderServer.chunkLoader;
++                regionLoader.b.clear();
++                regionLoader.c.clear();
+ 
+-            regionLoader.b.clear();
+-            regionLoader.c.clear();
++                try {
++                    FileIOThread.a().b();
++                } catch (InterruptedException ex) {
++                    Thread.currentThread().interrupt();
++                }
+ 
+-            try {
+-                FileIOThread.a().b();
+-            } catch (InterruptedException ex) {
+-                Thread.currentThread().interrupt();
++                chunkProviderServer.chunkLoader = null;
++                chunkProviderServer.chunkProvider = null;
+             }
+-
+-            chunkProviderServer.chunkLoader = null;
+-            chunkProviderServer.chunkProvider = null;
+-            chunkProviderServer.chunks.clear();
+         }
+ 
+         worlds.remove(world.getName().toLowerCase());
+-- 
+2.21.0.windows.1
+
