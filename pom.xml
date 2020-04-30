@@ -19,8 +19,8 @@
     <url>https://github.com/PaperSpigot/Spigot</url>
 
     <modules>
-        <module>PaperSpigot-Server</module>
-        <module>PaperSpigot-API</module>
+        <module>IdkSpigot-Server</module>
+        <module>IdkSpigot-API</module>
     </modules>
 
     <properties>
