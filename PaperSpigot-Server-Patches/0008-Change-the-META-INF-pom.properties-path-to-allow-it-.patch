@@ -1,0 +1,23 @@
+From 58cf7c52378b5017c0858a9aef9374b47be0be47 Mon Sep 17 00:00:00 2001
+From: Gilberto Garcia <gilbertodamian14@gmail.com>
+Date: Thu, 30 Apr 2020 18:51:41 -0500
+Subject: [PATCH] Change the META-INF pom.properties path, to allow it to work
+ with the changes of maven artifact and groupId
+
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
+index 3a4b1424..7725cab4 100644
+--- a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
++++ b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
+@@ -11,7 +11,7 @@ public final class Versioning {
+     public static String getBukkitVersion() {
+         String result = "Unknown-Version";
+ 
+-        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/org.github.paperspigot/paperspigot-api/pom.properties");
++        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/me.fixeddev/idkspigot-api/pom.properties");
+         Properties properties = new Properties();
+ 
+         if (stream != null) {
+-- 
+2.21.0.windows.1
+
