@@ -4,7 +4,6 @@ Date: Thu, 30 Apr 2020 18:51:41 -0500
 Subject: [PATCH] Change the META-INF pom.properties path, to allow it to work
  with the changes of maven artifact and groupId
 
-
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 index 3a4b1424..7725cab4 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
